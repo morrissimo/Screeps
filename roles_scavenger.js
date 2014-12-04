@@ -4,15 +4,13 @@
  * @param creep
  */
 module.exports = function (creep) {
-	if(creep.energy < creep.energyCapacity) {
-		var sources = creep.pos.findNearest(Game.DROPPED_ENERGY);
-		creep.moveTo(sources);
-		creep.pickup(sources);
-	}
-	else {
-		var target = creep.pos.findNearest(Game.MY_SPAWNS);
-
-		creep.moveTo(target);
-		creep.transferEnergy(target);
-	}
+    var drop = creep.pos.findNearest(Game.DROPPED_ENERGY);
+    if(drop !== null && (creep.energy < creep.energyCapacity)) {
+        creep.moveTo(drop);
+        creep.pickup(drop);
+        return;
+    }
+    var target = creep.pos.findNearest(Game.MY_SPAWNS);
+    creep.moveTo(target);
+    creep.transferEnergy(target);
 };

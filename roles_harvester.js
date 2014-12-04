@@ -3,15 +3,17 @@
  * @param creep
  */
 module.exports = function (creep) {
-	if(creep.energy < creep.energyCapacity) {
-		var sources = creep.pos.findNearest(Game.SOURCES);
-		creep.moveTo(sources);
-		creep.harvest(sources);
-	}
-	else {
-		var target = creep.pos.findNearest(Game.MY_SPAWNS);
-
-		creep.moveTo(target);
-		creep.transferEnergy(target);
-	}
+    var utils = require('utils');
+    var moveOpts = {};
+    var findOpts = {ignoreCreeps: true};
+    var nearestSpawn = creep.pos.findNearest(Game.MY_SPAWNS, findOpts);
+    if(creep.energy < creep.energyCapacity) {
+        //var sources = creep.pos.findNearest(Game.SOURCES);
+        var nearestSource = utils.sourceClosestToSpawn(nearestSpawn);
+        creep.moveTo(nearestSource, moveOpts);
+        creep.harvest(nearestSource);
+    } else {
+        creep.moveTo(nearestSpawn, moveOpts);
+        creep.transferEnergy(nearestSpawn);
+    }
 }
